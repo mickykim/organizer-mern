@@ -3,7 +3,9 @@ const Schema = mongoose.Schema;
 
 const TaskSchema = new Schema(
     {
-        title: {type: String, required: true, maxlength: 100},
+        title: {
+            type: String, required: true, maxlength: 100
+        },
         author: {type: String, required: true}
     }
 );
