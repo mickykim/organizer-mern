@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const indexRouter = require('./src/routes/index');
+const indexRouter = require('./src/routes/indexRoutes');
+const taskRouter = require('./src/routes/taskRoutes');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const PORT = 3000;
@@ -21,6 +22,7 @@ app.use(express.json()); // Parse incoming requests with JSON payloads
 
 // Routes
 app.use('/', indexRouter);
+app.use('/tasks', taskRouter);
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
