@@ -9,10 +9,12 @@ const PORT = 3000;
 dotenv.config();
 
 // Connect database
-mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true , useUnifiedTopology: true})
+mongoose.connect(process.env.DB_CONNECT, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Parse incoming requests with JSON payloads
@@ -21,12 +23,12 @@ app.use(express.json()); // Parse incoming requests with JSON payloads
 app.use('/', indexRouter);
 
 // Catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     next(createError(404));
 });
-  
+
 // Error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -37,5 +39,5 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${ PORT }`);
-})
+    console.log(`Server is running on port ${PORT}`);
+});
