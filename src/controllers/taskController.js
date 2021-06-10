@@ -1,20 +1,60 @@
 const Task = require('../models/Task');
 const { body } = require('express-validator');
 
-exports.index_get = function (req, res, next) {
-    res.send('GET Request Successful');
+exports.getTasks = function (req, res) {
+    Task.find({}, function (err, Tasks) {
+        if (err) {
+            res.send(err);
+        }
+        res.json(Tasks);
+    });
 };
 
-exports.index_post = function (req, res, next) {
+exports.addNewTask = function (req, res) {
     //! Need to add validation and sanitization of inputs
-
     let newTask = new Task(req.body);
 
-    newTask.save(function (err, Task) {
+    newTask.save(function (err, savedTask) {
         if (err) {
             res.send(err);
         }
 
-        res.json(Task);
+        res.json(savedTask);
+    });
+};
+
+exports.getTaskWithID = function (req, res) {
+    Task.findById(req.params.id, function (err, foundTask) {
+        if (err) {
+            res.send(err);
+        }
+
+        res.json(foundTask);
+    });
+};
+
+exports.updateTask = function (req, res) {
+    //! Need to add validation and sanitization of inputs
+    Task.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true },
+        function (err, updatedTask) {
+            if (err) {
+                res.send(err);
+            }
+
+            res.json(updatedTask);
+        }
+    );
+};
+
+exports.deleteTask = function (req, res) {
+    Task.findByIdAndDelete(req.params.id, function (err) {
+        if (err) {
+            res.send(err);
+        }
+
+        res.json({ message: 'Task successfully deleted' });
     });
 };
