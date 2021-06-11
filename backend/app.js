@@ -4,7 +4,7 @@ const indexRouter = require('./src/routes/indexRoutes');
 const taskRouter = require('./src/routes/taskRoutes');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const PORT = 3000;
+const PORT = 4000;
 
 // Configure secrets
 dotenv.config();
