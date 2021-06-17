@@ -1,25 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import TaskList from './Task/TaskList';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [tasks, setTasks] = useState(null);
+    const [currentTask, setCurrentTask] = useState(null);
+    async function fetchData() {
+        const url = 'http://localhost:4000/tasks';
+        try {
+            const response = await axios.get(url, { crossdomain: true });
+            setTasks(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+        return null;
+    }
+    // Similar to componentDidMount and componentDidUpdate
+    useEffect(() => {
+        fetchData();
+    }, [currentTask]);
+    return (
+        <div className="container">
+            <TaskList tasks={tasks} />
+        </div>
+    );
+};
 
 export default App;

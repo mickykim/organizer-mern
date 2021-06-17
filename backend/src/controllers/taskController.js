@@ -1,7 +1,7 @@
-const Task = require('../models/Task');
-const { body } = require('express-validator');
+import Task from '../models/Task.js';
+import { body } from 'express-validator';
 
-exports.getTasks = function (req, res) {
+export const getTasks = function (req, res) {
     Task.find({}, function (err, Tasks) {
         if (err) {
             res.send(err);
@@ -10,7 +10,7 @@ exports.getTasks = function (req, res) {
     });
 };
 
-exports.addNewTask = function (req, res) {
+export const addNewTask = function (req, res) {
     //! Need to add validation and sanitization of inputs
     let newTask = new Task(req.body);
 
@@ -23,7 +23,7 @@ exports.addNewTask = function (req, res) {
     });
 };
 
-exports.getTaskWithID = function (req, res) {
+export const getTaskWithID = function (req, res) {
     Task.findById(req.params.id, function (err, foundTask) {
         if (err) {
             res.send(err);
@@ -33,12 +33,13 @@ exports.getTaskWithID = function (req, res) {
     });
 };
 
-exports.updateTask = function (req, res) {
+export const updateTask = function (req, res) {
     //! Need to add validation and sanitization of inputs
     Task.findByIdAndUpdate(
         req.params.id,
         req.body,
-        { new: true },
+        // https://mongoosejs.com/docs/validation.html#update-validators
+        { new: true, runValidators: true },
         function (err, updatedTask) {
             if (err) {
                 res.send(err);
@@ -49,7 +50,7 @@ exports.updateTask = function (req, res) {
     );
 };
 
-exports.deleteTask = function (req, res) {
+export const deleteTask = function (req, res) {
     Task.findByIdAndDelete(req.params.id, function (err) {
         if (err) {
             res.send(err);

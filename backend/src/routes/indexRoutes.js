@@ -1,10 +1,9 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
 
-const task_controller = require('../controllers/taskController');
+const router = express.Router();
 
 router.get('/', function (req, res) {
     res.redirect('/tasks');
 });
 
-module.exports = router;
+export default router;
