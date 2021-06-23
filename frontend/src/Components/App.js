@@ -1,11 +1,18 @@
 import './App.css';
-import TaskList from './Task/TaskList';
+import TaskList from './Task/TaskList.js';
+import TaskForm from './Task/TaskForm.js';
+import AddButton from './AddButton';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 const App = () => {
-    const [tasks, setTasks] = useState(null);
-    const [currentTask, setCurrentTask] = useState(null);
+    const [tasks, setTasks] = useState();
+    const [currentTask, setCurrentTask] = useState();
+    const [showForm, setShowForm] = useState(false);
+    const toggleForm = () => {
+        setShowForm(!showForm);
+    };
     async function fetchData() {
         const url = 'http://localhost:4000/tasks';
         try {
@@ -19,11 +26,15 @@ const App = () => {
     // Similar to componentDidMount and componentDidUpdate
     useEffect(() => {
         fetchData();
-    }, [currentTask]);
+    }, []);
     return (
-        <div className="container">
-            <TaskList tasks={tasks} />
-        </div>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <div className="container">
+                <TaskList tasks={tasks} />
+                <TaskForm showForm={showForm} />
+                <AddButton toggleForm={toggleForm} />
+            </div>
+        </MuiPickersUtilsProvider>
     );
 };
 

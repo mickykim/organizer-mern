@@ -1,27 +1,32 @@
 import PropTypes from 'prop-types'; //impt + tab
 import React, { useState, useEffect } from 'react'; //imrse + tab
+import Task from './Task';
+import { Grid } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+
 //rafce + tab
-const TaskList = (props) => {
-    if (!props.tasks) {
-        return (
-            <div>
-                <div>Task List</div>
-                <h2>F</h2>
-            </div>
-        );
+const TaskList = ({ tasks }) => {
+    if (!tasks) {
+        return <Typography variant="h4">Task List</Typography>;
     }
 
     return (
-        <div>
-            <div>Task List</div>
+        <Grid
+            item
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+        >
+            <Typography variant="h4">Task List</Typography>
             <div>
-                <ul>
-                    {props.tasks.map((task) => (
-                        <li key={task._id}>{task.body}</li>
-                    ))}
-                </ul>
+                {tasks.map((task) => (
+                    <Grid item xs={12}>
+                        <Task key={task._id} task={task} />
+                    </Grid>
+                ))}
             </div>
-        </div>
+        </Grid>
     );
 };
 
