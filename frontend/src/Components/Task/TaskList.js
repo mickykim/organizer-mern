@@ -1,37 +1,32 @@
 import PropTypes from 'prop-types'; //impt + tab
 import React, { useState, useEffect } from 'react'; //imrse + tab
 import Task from './Task';
-import { Grid } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
+import { Grid, List, Divider, ListItem } from '@material-ui/core';
 
 //rafce + tab
 const TaskList = ({ tasks }) => {
-    if (!tasks) {
-        return <Typography variant="h4">Task List</Typography>;
-    }
-
+    //TODO: Fix unique key for each child element in a list
     return (
-        <Grid
-            item
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-        >
-            <Typography variant="h4">Task List</Typography>
-            <div>
-                {tasks.map((task) => (
-                    <Grid item xs={12}>
-                        <Task key={task._id} task={task} />
-                    </Grid>
-                ))}
-            </div>
-        </Grid>
+        <List>
+            <Task task={tasks[0]} uniqueKey={tasks[0]._id} key={tasks[0]._id} />
+            {tasks.slice(1).map((task, i) => (
+                <>
+                    <Divider key={i} />
+                    <Task
+                        task={task}
+                        uniqueKey={tasks[0]._id}
+                        key={tasks[0]._id}
+                    />
+                </>
+            ))}
+        </List>
     );
 };
 
 TaskList.defaultProps = {};
 
-TaskList.propTypes = {};
+TaskList.propTypes = {
+    tasks: PropTypes.arrayOf(PropTypes.object),
+};
 
 export default TaskList;

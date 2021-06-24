@@ -1,22 +1,32 @@
 import PropTypes from 'prop-types';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import { ListItemText, Grid } from '@material-ui/core';
 
-const Task = ({ task }) => {
+const Task = ({ task, uniqueKey }) => {
     return (
-        <Paper className="task">
-            <Typography variant="subtitle2">
-                {task.author} - {task.due_date}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-                {task.body}
-            </Typography>
-        </Paper>
+        <>
+            <ListItemText
+                primary={task.body}
+                secondary={task.author}
+                key={uniqueKey + '1'}
+                style={{}}
+            ></ListItemText>
+
+            <ListItemText
+                variant="body1"
+                secondary={'Complete by: ' + task.due_date}
+                key={uniqueKey + '2'}
+                style={{}}
+                secondaryTypographyProps={{ align: 'right' }}
+            ></ListItemText>
+        </>
     );
 };
 
 Task.defaultProps = {};
 
-Task.propTypes = {};
+Task.propTypes = {
+    task: PropTypes.object.isRequired,
+    uniqueKey: PropTypes.string.isRequired,
+};
 
 export default Task;
