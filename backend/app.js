@@ -3,15 +3,12 @@ import indexRouter from './src/routes/indexRoutes.js';
 import taskRouter from './src/routes/taskRoutes.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-
+import keys from './config/keys.js';
 const PORT = 4000;
 const app = express();
 
-// Configure secrets
-dotenv.config();
-
 // Connect database
-mongoose.connect(process.env.DB_CONNECT, {
+mongoose.connect(keys.Mongo_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -29,6 +26,7 @@ app.use(function (req, res, next) {
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept'
     );
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
     next();
 });
 // Routes

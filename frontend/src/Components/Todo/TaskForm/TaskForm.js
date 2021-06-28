@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import {
     TextField,
@@ -16,36 +15,42 @@ import {
     DialogContentText,
     FormControl,
     FormControlLabel,
-    Snackbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import formStyle from '../../Styles/taskFormStyle.js';
-import MuiAlert from '@material-ui/lab/Alert';
+import formStyle from '../../../Styles/taskFormStyle.js';
+import SaveIcon from '@material-ui/icons/Save';
+import ShowFormButton from './ShowFormButton.js';
+import API from '../../api.js';
+import PaperComponent from './PaperComponent.js';
 
-const TaskForm = ({ closeForm }) => {
+const TaskForm = ({ updatePage }) => {
     //TODO: Add post task route functionality
     const [author, setAuthor] = useState('');
     const [body, setBody] = useState('');
     const [dueDate, setDueDate] = useState(null);
     const [status, setStatus] = useState('Pending');
-    const [taskSuccess, setTaskSuccess] = useState(false);
+    const [showForm, setShowForm] = useState(false);
 
-    function Alert(props) {
-        return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    const openForm = () => {
+        setShowForm(true);
+    };
+
+    const closeForm = () => {
+        setShowForm(false);
+    };
 
     const submitTask = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:4000/tasks', {
+            const res = await API.post('tasks', {
                 author: author,
                 body: body,
                 due_date: dueDate,
                 status: status,
             });
             closeForm();
-            setTaskSuccess(true);
+            updatePage();
             console.log(res);
         } catch (error) {
             if (error) {
@@ -55,9 +60,6 @@ const TaskForm = ({ closeForm }) => {
     };
     const useStyles = makeStyles(formStyle);
 
-    const setTaskSuccessFalse = () => {
-        setTaskSuccess(false);
-    };
     const statusOnChange = (e) => {
         setStatus(e.target.value);
     };
@@ -71,11 +73,24 @@ const TaskForm = ({ closeForm }) => {
         setDueDate(date);
     };
     const classes = useStyles();
+    if (!showForm) {
+        return (
+            <Grid item>
+                <ShowFormButton openForm={openForm} />
+            </Grid>
+        );
+    }
     return (
-        <>
-            <DialogTitle>Add New Task</DialogTitle>
-            <Grid container spacing={1} justify="space-around" xs={12}>
-                <DialogContent dividers>
+        <Dialog
+            open={showForm}
+            onClose={closeForm}
+            PaperComponent={PaperComponent}
+        >
+            <DialogTitle id="draggable-dialog-title" style={{ cursor: 'move' }}>
+                Add New Task
+            </DialogTitle>
+            <DialogContent dividers style={{ overflow: 'hidden' }}>
+                <Grid container spacing={0} justify="space-around" xs={12}>
                     <Grid container item>
                         <Grid item xs={6}>
                             <TextField
@@ -137,24 +152,18 @@ const TaskForm = ({ closeForm }) => {
                                             variant="contained"
                                             color="primary"
                                             className={classes.button}
+                                            startIcon={<SaveIcon />}
                                         >
-                                            Submit
+                                            Save
                                         </Button>
                                     </Grid>
                                 </Grid>
                             </FormControl>
                         </Grid>
                     </Grid>
-                </DialogContent>
-            </Grid>
-            <Snackbar
-                open={taskSuccess}
-                onClose={setTaskSuccessFalse}
-                autoHideDuration={15000}
-            >
-                <Alert severity="success">Task sucessfully added!</Alert>
-            </Snackbar>
-        </>
+                </Grid>
+            </DialogContent>
+        </Dialog>
     );
 };
 

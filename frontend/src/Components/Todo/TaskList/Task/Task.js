@@ -8,7 +8,7 @@ const Task = ({ task, uniqueKey }) => {
                 primary={task.body}
                 secondary={task.author}
                 key={uniqueKey + '1'}
-                style={{}}
+                style={{ marginLeft: '15px' }}
             ></ListItemText>
 
             <ListItemText

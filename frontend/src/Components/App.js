@@ -1,132 +1,76 @@
-import './App.css';
-import TaskList from './Task/TaskList.js';
-import TaskForm from './Task/TaskForm.js';
-import ShowFormButton from './ShowFormButton';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import DateFnsUtils from '@date-io/date-fns';
+import red from '@material-ui/core/colors/red';
 import {
-    Paper,
+    CssBaseline,
+    useMediaQuery,
+    AppBar,
+    Toolbar,
+    Button,
+    IconButton,
     Typography,
     Grid,
-    CircularProgress,
-    Container,
-    Dialog,
-    CssBaseline,
 } from '@material-ui/core';
-import Draggable from 'react-draggable';
+import MenuIcon from '@material-ui/icons/Menu';
+import { light } from '@material-ui/core/styles/createPalette';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import Todo from './Todo/Todo.js';
+import React, { useState } from 'react';
+
+// Create a theme instance based on user
 
 const App = () => {
-    //TODO: Toggle dark mode buttton
+    const [prefersDarkMode, setPrefersDarkMode] = useState(
+        window.matchMedia('(prefers-color-scheme: dark)')
+    );
+    const [updateTheme, setUpdateTheme] = useState(false);
 
-    const [tasks, setTasks] = useState();
-    const [currentTask, setCurrentTask] = useState();
-    const [showForm, setShowForm] = useState(false);
-    const theme = createMuiTheme({
-        palette: {
-            type: 'dark',
-        },
-    });
+    const theme = React.useMemo(
+        () =>
+            createMuiTheme({
+                palette: {
+                    type: prefersDarkMode ? 'dark' : 'light',
+                },
+            }),
+        [prefersDarkMode]
+    );
 
-    const openForm = () => {
-        setShowForm(true);
+    const toggleTheme = () => {
+        setUpdateTheme(!updateTheme);
     };
 
-    const closeForm = () => {
-        setShowForm(false);
-    };
-
-    async function fetchData() {
-        const url = 'http://localhost:4000/tasks';
-        try {
-            const response = await axios.get(url, { crossdomain: true });
-            setTasks(response.data);
-        } catch (error) {
-            console.log(error);
-        }
-        return null;
-    }
-
-    function PaperComponent(props) {
-        return (
-            <Draggable
-                handle="#draggable-dialog-title"
-                cancel={'[class*="MuiDialogContent-root"]'}
-            >
-                <Paper {...props} />
-            </Draggable>
-        );
-    }
-
-    // Similar to componentDidMount and componentDidUpdate
-    useEffect(() => {
-        fetchData();
-    }, [showForm]);
-
-    if (tasks) {
-        return (
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Container maxWidth="xs">
-                        <Typography variant="h4" align="center">
-                            Task List
-                        </Typography>
-                        <Paper>
-                            <Grid
-                                container
-                                justify="center"
-                                component="main"
-                                direction="column"
-                                style={{ maxHeight: '70vh' }}
-                            >
-                                <Grid item xs={12}>
-                                    <TaskList tasks={tasks} />
-                                </Grid>
-
-                                <Dialog
-                                    open={showForm}
-                                    onClose={closeForm}
-                                    PaperComponent={PaperComponent}
-                                >
-                                    <TaskForm closeForm={closeForm} />
-                                </Dialog>
-
-                                <Grid
-                                    container
-                                    justify="flex-end"
-                                    style={{ padding: '15px' }}
-                                >
-                                    <Grid item xs={2}>
-                                        <ShowFormButton openForm={openForm} />
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Paper>
-                    </Container>
-                </MuiPickersUtilsProvider>
-            </ThemeProvider>
-        );
-    }
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Container maxWidth="lg">
-                <Grid
-                    container
-                    justify="center"
-                    alignItems="center"
-                    alignContent="center"
-                    component="main"
-                    style={{ minHeight: '100vh' }}
-                >
-                    <Grid item>
-                        <CircularProgress></CircularProgress>
-                    </Grid>
+            <Grid container>
+                <Grid item xs={12}>
+                    <AppBar position="static">
+                        <Toolbar>
+                            <IconButton
+                                edge="start"
+                                color="inherit"
+                                aria-label="menu"
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography variant="h6">News</Typography>
+                            <Button color="inherit">Login</Button>
+                        </Toolbar>
+                    </AppBar>
                 </Grid>
-            </Container>
+                <Router>
+                    <Switch>
+                        <Route path="/">
+                            <Grid item xs={12}>
+                                <Todo
+                                    prefersDarkMode={prefersDarkMode}
+                                    setPrefersDarkMode={setPrefersDarkMode}
+                                    toggleTheme={toggleTheme}
+                                />
+                            </Grid>
+                        </Route>
+                    </Switch>
+                </Router>
+            </Grid>
         </ThemeProvider>
     );
 };
