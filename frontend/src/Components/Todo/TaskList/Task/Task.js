@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { ListItemText, Grid } from '@material-ui/core';
+import { ListItemText } from '@material-ui/core';
 
 const Task = ({ task, uniqueKey }) => {
     return (

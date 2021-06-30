@@ -4,7 +4,6 @@ import SuccessSnackbar from '../SnackBars/SuccessSnackbar';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import {
     Paper,
@@ -12,17 +11,21 @@ import {
     Grid,
     CircularProgress,
     Container,
-    CssBaseline,
 } from '@material-ui/core';
 import LightButton from '../LightButton';
+import { makeStyles } from '@material-ui/core/styles';
+import todoStyle from '../../Styles/todoStyle';
 
 const Todo = ({ prefersDarkMode, setPrefersDarkMode }) => {
-    //TODO: Toggle dark mode buttton
-
     const [tasks, setTasks] = useState();
     const [currentTask, setCurrentTask] = useState();
     const [updatePage, setUpdatePage] = useState(false);
+    const minHeight = '55vh';
+    const maxHeight = '55vh';
+    const minWidth = '20vw';
 
+    const useStyles = makeStyles(todoStyle);
+    const classes = useStyles();
     const toggleUpdatePage = () => {
         setUpdatePage(!updatePage);
     };
@@ -54,21 +57,19 @@ const Todo = ({ prefersDarkMode, setPrefersDarkMode }) => {
                             alignItems="center"
                             justify="center"
                             alignContent="center"
-                            style={{ minHeight: '100vh' }}
+                            className={classes.mainGrid}
                         >
-                            <Grid item style={{ paddingBottom: '2em' }}>
-                                <Typography variant="h4" align="center">
+                            <Grid item>
+                                <Typography
+                                    variant="h4"
+                                    align="center"
+                                    className={classes.titleTypography}
+                                >
                                     Task List
                                 </Typography>
                             </Grid>
                             <Grid item>
-                                <Paper
-                                    style={{
-                                        minHeight: '55vh',
-                                        minWidth: '20vw',
-                                        overflow: 'auto',
-                                    }}
-                                >
+                                <Paper className={classes.paperContainer}>
                                     <Grid
                                         container
                                         justify="center"
@@ -76,12 +77,19 @@ const Todo = ({ prefersDarkMode, setPrefersDarkMode }) => {
                                         direction="column"
                                         maxWidth="xs"
                                     >
-                                        <Grid item xs={12}>
+                                        <Grid
+                                            item
+                                            xs={12}
+                                            className={classes.taskList}
+                                        >
                                             <TaskList
                                                 tasks={tasks}
                                                 updatePage={toggleUpdatePage}
                                             />
                                         </Grid>
+                                        <TaskForm
+                                            updatePage={toggleUpdatePage}
+                                        />
                                     </Grid>
                                 </Paper>
                             </Grid>
@@ -89,26 +97,14 @@ const Todo = ({ prefersDarkMode, setPrefersDarkMode }) => {
                                 <Grid
                                     container
                                     justify="space-around"
-                                    style={{
-                                        paddingTop: '15px',
-                                        minWidth: '20vw',
-                                    }}
+                                    className={classes.footer}
                                 >
-                                    <Grid
-                                        item
-                                        xs={7}
-                                        style={{ paddingTop: '10px' }}
-                                    >
+                                    <Grid item>
                                         <LightButton
                                             prefersDarkMode={prefersDarkMode}
                                             setPrefersDarkMode={
                                                 setPrefersDarkMode
                                             }
-                                        />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <TaskForm
-                                            updatePage={toggleUpdatePage}
                                         />
                                     </Grid>
                                 </Grid>

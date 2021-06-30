@@ -14,5 +14,8 @@ const taskFormStyle = (theme) => ({
         width: 250,
         marginBottom: 15,
     },
+    draggable: {
+        cursor: 'move',
+    },
 });
 export default taskFormStyle;

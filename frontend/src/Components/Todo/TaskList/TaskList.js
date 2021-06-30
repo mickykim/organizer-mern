@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'; //impt + tab
-import React, { useState, useEffect } from 'react'; //imrse + tab
 import Task from './Task/Task';
-import { Grid, List, Divider, ListItem } from '@material-ui/core';
+import { Grid, List, Divider } from '@material-ui/core';
 import TaskDeleteButton from './Task/TaskDeleteButton';
 
 //rafce + tab

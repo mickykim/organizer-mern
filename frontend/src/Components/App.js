@@ -1,8 +1,6 @@
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import red from '@material-ui/core/colors/red';
 import {
     CssBaseline,
-    useMediaQuery,
     AppBar,
     Toolbar,
     Button,
@@ -11,8 +9,7 @@ import {
     Grid,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import { light } from '@material-ui/core/styles/createPalette';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Todo from './Todo/Todo.js';
 import React, { useState } from 'react';
 
@@ -41,22 +38,17 @@ const App = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
+
+            <AppBar>
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" aria-label="menu">
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6">Todo</Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
             <Grid container>
-                <Grid item xs={12}>
-                    <AppBar position="static">
-                        <Toolbar>
-                            <IconButton
-                                edge="start"
-                                color="inherit"
-                                aria-label="menu"
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography variant="h6">News</Typography>
-                            <Button color="inherit">Login</Button>
-                        </Toolbar>
-                    </AppBar>
-                </Grid>
                 <Router>
                     <Switch>
                         <Route path="/">

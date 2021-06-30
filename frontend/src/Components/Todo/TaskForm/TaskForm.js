@@ -7,12 +7,9 @@ import {
     FormLabel,
     Button,
     Grid,
-    Paper,
     Dialog,
     DialogTitle,
-    DialogActions,
     DialogContent,
-    DialogContentText,
     FormControl,
     FormControlLabel,
 } from '@material-ui/core';
@@ -28,7 +25,7 @@ const TaskForm = ({ updatePage }) => {
     //TODO: Add post task route functionality
     const [author, setAuthor] = useState('');
     const [body, setBody] = useState('');
-    const [dueDate, setDueDate] = useState(null);
+    const [dueDate, setDueDate] = useState(new Date());
     const [status, setStatus] = useState('Pending');
     const [showForm, setShowForm] = useState(false);
 
@@ -58,7 +55,9 @@ const TaskForm = ({ updatePage }) => {
             }
         }
     };
+
     const useStyles = makeStyles(formStyle);
+    const classes = useStyles();
 
     const statusOnChange = (e) => {
         setStatus(e.target.value);
@@ -72,13 +71,9 @@ const TaskForm = ({ updatePage }) => {
     const dueDateOnchange = (date) => {
         setDueDate(date);
     };
-    const classes = useStyles();
+
     if (!showForm) {
-        return (
-            <Grid item>
-                <ShowFormButton openForm={openForm} />
-            </Grid>
-        );
+        return <ShowFormButton openForm={openForm} />;
     }
     return (
         <Dialog
@@ -86,7 +81,10 @@ const TaskForm = ({ updatePage }) => {
             onClose={closeForm}
             PaperComponent={PaperComponent}
         >
-            <DialogTitle id="draggable-dialog-title" style={{ cursor: 'move' }}>
+            <DialogTitle
+                id="draggable-dialog-title"
+                className={classes.draggable}
+            >
                 Add New Task
             </DialogTitle>
             <DialogContent dividers style={{ overflow: 'hidden' }}>
