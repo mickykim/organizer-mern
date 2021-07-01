@@ -1,6 +1,6 @@
 const todoStyle = (theme) => ({
     mainGrid: {
-        minHeight: '100vh',
+        minHeight: '90vh',
     },
     titleTypography: {
         paddingBottom: '1.5rem',
@@ -17,9 +17,8 @@ const todoStyle = (theme) => ({
         maxHeight: '55vh',
         minWidth: '20vw',
     },
-    footer: {
-        paddingTop: '2rem',
-        minWidth: '20vw',
+    loadingContainer: {
+        minHeight: '100vh',
     },
 });
 export default todoStyle;

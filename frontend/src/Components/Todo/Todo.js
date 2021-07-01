@@ -12,7 +12,6 @@ import {
     CircularProgress,
     Container,
 } from '@material-ui/core';
-import LightButton from '../LightButton';
 import { makeStyles } from '@material-ui/core/styles';
 import todoStyle from '../../Styles/todoStyle';
 
@@ -92,22 +91,6 @@ const Todo = ({ prefersDarkMode, setPrefersDarkMode }) => {
                                     </Grid>
                                 </Paper>
                             </Grid>
-                            <Grid item>
-                                <Grid
-                                    container
-                                    justify="space-around"
-                                    className={classes.footer}
-                                >
-                                    <Grid item>
-                                        <LightButton
-                                            prefersDarkMode={prefersDarkMode}
-                                            setPrefersDarkMode={
-                                                setPrefersDarkMode
-                                            }
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </Grid>
                             <SuccessSnackbar />
                         </Grid>
                     </Container>
@@ -117,7 +100,6 @@ const Todo = ({ prefersDarkMode, setPrefersDarkMode }) => {
     }
     return (
         <>
-            ={' '}
             <Container maxWidth="lg">
                 <Grid
                     container
@@ -125,7 +107,7 @@ const Todo = ({ prefersDarkMode, setPrefersDarkMode }) => {
                     alignItems="center"
                     alignContent="center"
                     component="main"
-                    style={{ minHeight: '100vh' }}
+                    className={classes.loadingContainer}
                 >
                     <Grid item>
                         <CircularProgress></CircularProgress>

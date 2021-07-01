@@ -7,8 +7,13 @@ import {
     Typography,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import { useHistory } from 'react-router-dom';
 
 const Header = () => {
+    const history = useHistory();
+    const loginRedirect = () => {
+        history.push('/');
+    };
     return (
         <AppBar>
             <Toolbar>
@@ -16,7 +21,9 @@ const Header = () => {
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6">Todo</Typography>
-                <Button color="inherit">Login</Button>
+                <Button color="inherit" onClick={loginRedirect}>
+                    Login
+                </Button>
             </Toolbar>
         </AppBar>
     );

@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import LogIn from './LogIn/LogIn';
 import Register from './Register/Register';
 import Header from './Header/Header';
+import Footer from './Footer/Footer';
 
 // Create a theme instance based on user
 
@@ -13,7 +14,6 @@ const App = () => {
     const [prefersDarkMode, setPrefersDarkMode] = useState(
         window.matchMedia('(prefers-color-scheme: dark)')
     );
-    const [updateTheme, setUpdateTheme] = useState(false);
     const theme = React.useMemo(
         () =>
             createMuiTheme({
@@ -24,10 +24,6 @@ const App = () => {
         [prefersDarkMode]
     );
 
-    const toggleTheme = () => {
-        setUpdateTheme(!updateTheme);
-    };
-
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -37,18 +33,27 @@ const App = () => {
                         <Grid item xs={12}>
                             <LogIn />
                         </Grid>
+                        <Footer
+                            prefersDarkMode={prefersDarkMode}
+                            setPrefersDarkMode={setPrefersDarkMode}
+                        />
+                    </Route>
+
+                    <Route path="/register">
+                        <Register />
+                        <Footer
+                            prefersDarkMode={prefersDarkMode}
+                            setPrefersDarkMode={setPrefersDarkMode}
+                        />
                     </Route>
 
                     <Route path="/todo">
                         <Header />
-                        <Todo
+                        <Todo />
+                        <Footer
                             prefersDarkMode={prefersDarkMode}
                             setPrefersDarkMode={setPrefersDarkMode}
-                            toggleTheme={toggleTheme}
                         />
-                    </Route>
-                    <Route path="/register">
-                        <Register />
                     </Route>
                 </Switch>
             </Router>
