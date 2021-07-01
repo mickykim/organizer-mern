@@ -1,17 +1,11 @@
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import {
-    CssBaseline,
-    AppBar,
-    Toolbar,
-    Button,
-    IconButton,
-    Typography,
-    Grid,
-} from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import { CssBaseline, Grid } from '@material-ui/core';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Todo from './Todo/Todo.js';
 import React, { useState } from 'react';
+import LogIn from './LogIn/LogIn';
+import Register from './Register/Register';
+import Header from './Header/Header';
 
 // Create a theme instance based on user
 
@@ -20,7 +14,6 @@ const App = () => {
         window.matchMedia('(prefers-color-scheme: dark)')
     );
     const [updateTheme, setUpdateTheme] = useState(false);
-
     const theme = React.useMemo(
         () =>
             createMuiTheme({
@@ -38,31 +31,27 @@ const App = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
+            <Router>
+                <Switch>
+                    <Route exact path="/">
+                        <Grid item xs={12}>
+                            <LogIn />
+                        </Grid>
+                    </Route>
 
-            <AppBar>
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" aria-label="menu">
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6">Todo</Typography>
-                    <Button color="inherit">Login</Button>
-                </Toolbar>
-            </AppBar>
-            <Grid container>
-                <Router>
-                    <Switch>
-                        <Route path="/">
-                            <Grid item xs={12}>
-                                <Todo
-                                    prefersDarkMode={prefersDarkMode}
-                                    setPrefersDarkMode={setPrefersDarkMode}
-                                    toggleTheme={toggleTheme}
-                                />
-                            </Grid>
-                        </Route>
-                    </Switch>
-                </Router>
-            </Grid>
+                    <Route path="/todo">
+                        <Header />
+                        <Todo
+                            prefersDarkMode={prefersDarkMode}
+                            setPrefersDarkMode={setPrefersDarkMode}
+                            toggleTheme={toggleTheme}
+                        />
+                    </Route>
+                    <Route path="/register">
+                        <Register />
+                    </Route>
+                </Switch>
+            </Router>
         </ThemeProvider>
     );
 };

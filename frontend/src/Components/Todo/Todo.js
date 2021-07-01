@@ -75,7 +75,6 @@ const Todo = ({ prefersDarkMode, setPrefersDarkMode }) => {
                                         justify="center"
                                         component="main"
                                         direction="column"
-                                        maxWidth="xs"
                                     >
                                         <Grid
                                             item
