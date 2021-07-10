@@ -40,7 +40,7 @@ const TaskForm = ({ updatePage }) => {
     const submitTask = async (e) => {
         e.preventDefault();
         try {
-            const res = await API.post('tasks', {
+            const res = await API.post('/tasks', {
                 author: author,
                 body: body,
                 due_date: dueDate,

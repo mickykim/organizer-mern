@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import API from '../api';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -36,6 +38,46 @@ const useStyles = makeStyles((theme) => ({
 export default function Register() {
     const classes = useStyles();
 
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const history = useHistory();
+
+    const firstNameOnChange = (e) => {
+        setFirstName(e.target.value);
+    };
+
+    const lastNameOnChange = (e) => {
+        setLastName(e.target.value);
+    };
+
+    const emailOnChange = (e) => {
+        setEmail(e.target.value);
+    };
+
+    const passwordOnChange = (e) => {
+        setPassword(e.target.value);
+    };
+
+    const registerUser = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await API.post('/register', {
+                firstName,
+                lastName,
+                email,
+                password,
+            });
+            console.log(res);
+            history.push('/');
+        } catch (err) {
+            if (err) {
+                console.error(err);
+            }
+        }
+    };
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -46,7 +88,11 @@ export default function Register() {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form
+                    className={classes.form}
+                    noValidate
+                    onSubmit={registerUser}
+                >
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -58,6 +104,7 @@ export default function Register() {
                                 id="firstName"
                                 label="First Name"
                                 autoFocus
+                                onChange={firstNameOnChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -69,6 +116,7 @@ export default function Register() {
                                 label="Last Name"
                                 name="lastName"
                                 autoComplete="lname"
+                                onChange={lastNameOnChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -80,6 +128,7 @@ export default function Register() {
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
+                                onChange={emailOnChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -92,6 +141,7 @@ export default function Register() {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                onChange={passwordOnChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
