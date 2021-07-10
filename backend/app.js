@@ -4,9 +4,11 @@ import taskRouter from './src/routes/taskRoutes.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import keys from './config/keys.js';
+import passport from 'passport';
+import passportConfig from './config/passport.js';
+passportConfig(passport);
 const PORT = 4000;
 const app = express();
-
 // Connect database
 mongoose.connect(keys.Mongo_URI, {
     useNewUrlParser: true,
@@ -18,7 +20,6 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Parse incoming requests with JSON payloads
-
 // Enable CORS
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // update to match the domain you will make the request from
@@ -46,7 +47,7 @@ app.use(function (err, req, res, next) {
 
     // Render the error page
     res.status(err.status || 500);
-    res.render('error');
+    res.json({ message: err.message, error: err });
 });
 
 app.listen(PORT, () => {

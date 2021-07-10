@@ -22,10 +22,16 @@ const UserSchema = mongoose.Schema({
 });
 
 UserSchema.pre('save', async function (next) {
-    const user = this;
-    const hash = await bcrypt.hash(this.password, 10);
-    this.password = hash;
-    next();
+    // Salt and Hash password before storing
+    try {
+        const hashedPassword = await bcrypt.hash(this.password, 12);
+        this.password = hashedPassword;
+        next();
+    } catch (err) {
+        if (err) {
+            next(err);
+        }
+    }
 });
 
 UserSchema.methods.isValidPassword = async function (password) {
