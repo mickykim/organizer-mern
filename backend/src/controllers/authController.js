@@ -1,6 +1,7 @@
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import keys from '../../config/keys.js';
+import utils from '../../lib/utils.js';
 
 export const registerUser = [
     passport.authenticate('register', { session: false }),
@@ -21,16 +22,12 @@ export const loginUser = (req, res, next) => {
         if (!user) {
             return res.redirect('/login');
         }
+        const tokenObject = utils.issueJWT(user);
 
-        req.login(user, { session: false }, (error) => {
-            if (error) {
-                return next(error);
-            }
-            // Signing JWT
-            const body = { _id: user._id, email: user.email };
-            const token = jwt.sign({ user: body }, keys.JWT_SECRET);
-
-            return res.json({ token });
+        return res.status(200).json({
+            success: true,
+            token: tokenObject.token,
+            expires: tokenObject.expiresIn,
         });
     });
 };
