@@ -30,7 +30,10 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
     next();
 });
-// Routes
+
+/**
+ * -------------- ROUTES ----------------
+ */
 app.use('/', indexRouter);
 app.use('/tasks', taskRouter);
 
@@ -50,6 +53,9 @@ app.use(function (err, req, res, next) {
     res.json({ message: err.message, error: err });
 });
 
+/**
+ * -------------- SERVER ----------------
+ */
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

@@ -2,7 +2,10 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import User from '../src/models/User.js';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
+import * as fs from 'fs';
 import keys from './keys.js';
+
+const PUBLIC_KEY = fs.readFileSync('./rsa-key/public.pem', 'utf8');
 
 export default function passportConfig(passport) {
     // Function defined in use is called when 'passport.authenticate()' is called with the name as a parameter.
@@ -17,6 +20,7 @@ export default function passportConfig(passport) {
             async (req, email, password, done) => {
                 // req is accepted because of previous parameter option enabled
                 try {
+                    // Done syntax is done(errorData, successData, message/extraInfo)
                     const existingUser = await User.findOne({ email });
                     if (!existingUser) {
                         // User does not exist
@@ -68,10 +72,28 @@ export default function passportConfig(passport) {
         )
     );
 
+    // Verify JWT signature
     passport.use(
-        new JwtStrategy({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: keys.JWT_SECRET,
-        })
+        new JwtStrategy(
+            {
+                jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+                secretOrKey: PUBLIC_KEY,
+                algorithms: ['RS256'],
+            },
+            function (jwt_payload, done) {
+                // JWT signature valid
+                User.findOne({ _id: jwt_payload.sub }, function (err, user) {
+                    if (err) {
+                        done(err);
+                    }
+                    // JWT and user is valid
+                    if (user) return done(null, user);
+
+                    return done(null, false, {
+                        message: 'User with JWT not found',
+                    });
+                });
+            }
+        )
     );
 }
