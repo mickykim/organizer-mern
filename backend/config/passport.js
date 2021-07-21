@@ -4,8 +4,12 @@ import User from '../src/models/User.js';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
 import * as fs from 'fs';
 import keys from './keys.js';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const PUBLIC_KEY = fs.readFileSync('./rsa-key/public.pem', 'utf8');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pathToKey = path.join(__dirname, 'rsa-key/public.pem');
+const PUBLIC_KEY = fs.readFileSync(pathToKey, 'utf8');
 
 export default function passportConfig(passport) {
     // Function defined in use is called when 'passport.authenticate()' is called with the name as a parameter.
@@ -53,7 +57,7 @@ export default function passportConfig(passport) {
             },
             async (email, password, done) => {
                 try {
-                    const user = await User.findOne({ email });
+                    const user = await User.findOne({ email }).exec();
                     if (!user) {
                         return done(null, false, { message: 'User not found' });
                     }

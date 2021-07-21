@@ -1,18 +1,24 @@
 import jsonwebtoken from 'jsonwebtoken';
 import * as fs from 'fs';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
 /**
  * Issues a JWT for the provided user
  * @param {*} user - The user object. It is required to set the sub value in the JWT payload to the id on MongoDB
  */
 function issueJWT(user) {
-    const PRIVATE_KEY = fs.readFileSync(
-        '../config/rsa-key/private.pem',
-        'utf-8'
+    if (!user) return {};
+
+    const __dirname = dirname(fileURLToPath(import.meta.url));
+    const pathToPrivateKey = path.join(
+        __dirname,
+        '../config/rsa-key/private.pem'
     );
-    const expiresIn = '1d';
-    if (!user) {
-        return {};
-    }
+
+    const PRIVATE_KEY = fs.readFileSync(pathToPrivateKey, 'utf-8');
+    const expiresIn = '10m';
+
     const payload = {
         sub: user._id,
         iat: Date.now(),
@@ -24,7 +30,9 @@ function issueJWT(user) {
     });
 
     return {
-        token: 'Bearer' + signedToken,
-        expires: expiresIn,
+        token: `Bearer ${signedToken}`,
+        expiresIn: expiresIn,
     };
 }
+
+export { issueJWT };

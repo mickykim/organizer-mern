@@ -33,7 +33,7 @@ const Todo = ({ prefersDarkMode, setPrefersDarkMode }) => {
         const url = 'http://localhost:4000/tasks';
         try {
             const response = await axios.get(url, { crossdomain: true });
-            setTasks(response.data);
+            setTasks(response.data.tasks);
         } catch (error) {
             console.log(error);
         }

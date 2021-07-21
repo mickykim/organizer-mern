@@ -2,11 +2,11 @@ import Task from '../models/TaskModel.js';
 import { body } from 'express-validator';
 
 export const getTasks = function (req, res) {
-    Task.find({}, function (err, Tasks) {
+    Task.find({}, function (err, tasks) {
         if (err) {
-            res.send(err);
+            res.json({ success: false, message: err.message, error: err });
         }
-        res.json(Tasks);
+        res.json({ success: true, tasks: tasks });
     });
 };
 
@@ -16,7 +16,7 @@ export const addNewTask = function (req, res) {
 
     newTask.save(function (err, savedTask) {
         if (err) {
-            res.send(err);
+            res.json({ success: false, message: err.message, error: err });
         }
 
         res.json(savedTask);
@@ -26,10 +26,10 @@ export const addNewTask = function (req, res) {
 export const getTaskWithID = function (req, res) {
     Task.findById(req.params.id, function (err, foundTask) {
         if (err) {
-            res.send(err);
+            res.json({ success: false, message: err.message, error: err });
         }
 
-        res.json(foundTask);
+        res.json({ success: true, task: foundTask });
     });
 };
 
@@ -42,10 +42,10 @@ export const updateTask = function (req, res) {
         { new: true, runValidators: true },
         function (err, updatedTask) {
             if (err) {
-                res.send(err);
+                res.json({ err });
             }
 
-            res.json(updatedTask);
+            res.json({ success: true, task: updatedTask });
         }
     );
 };
@@ -56,6 +56,6 @@ export const deleteTask = function (req, res) {
             res.send(err);
         }
 
-        res.json({ message: 'Task successfully deleted' });
+        res.json({ success: true, message: 'Task successfully deleted' });
     });
 };

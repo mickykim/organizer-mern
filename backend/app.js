@@ -35,6 +35,7 @@ app.use(function (req, res, next) {
  * -------------- ROUTES ----------------
  */
 app.use('/', indexRouter);
+app.use(passport.authenticate('jwt', { session: false }));
 app.use('/tasks', taskRouter);
 
 // Catch 404 and forward to error handler
@@ -50,7 +51,7 @@ app.use(function (err, req, res, next) {
 
     // Render the error page
     res.status(err.status || 500);
-    res.json({ message: err.message, error: err });
+    res.json({ success: false, message: err.message, error: err });
 });
 
 /**
