@@ -17,11 +17,11 @@ function issueJWT(user) {
     );
 
     const PRIVATE_KEY = fs.readFileSync(pathToPrivateKey, 'utf-8');
-    const expiresIn = '10m';
+    const expiresIn = '10s';
 
     const payload = {
         sub: user._id,
-        iat: Date.now(),
+        iat: Math.floor(Date.now() / 1000), // iat takes time as seconds since the Epoch
     };
 
     const signedToken = jsonwebtoken.sign(payload, PRIVATE_KEY, {
